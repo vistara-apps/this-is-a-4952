@@ -4,11 +4,15 @@
 
 @layer base {
   html {
-    @apply dark;
+    @apply antialiased;
   }
   
   body {
-    @apply bg-dark-bg text-dark-text antialiased;
+    @apply bg-bg text-text antialiased;
+  }
+  
+  html.dark body {
+    @apply bg-dark-bg text-dark-text;
   }
 }
 
