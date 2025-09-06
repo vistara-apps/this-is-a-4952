@@ -1,10 +1,53 @@
-import React, { useState } from 'react'
-import { TrendingUp, DollarSign, Clock, BarChart3, PieChart, Activity } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { TrendingUp, DollarSign, Clock, BarChart3, PieChart, Activity, Zap, Brain } from 'lucide-react'
 import AnalyticsChart from './AnalyticsChart'
+import { reservoirService, openaiService } from '../services/api.js'
+import { useRealtimeMarket } from '../services/realtime.js'
 
 const Analytics = () => {
   const [timeRange, setTimeRange] = useState('7d')
   const [selectedMetric, setSelectedMetric] = useState('sales')
+  const [marketData, setMarketData] = useState(null)
+  const [aiInsights, setAiInsights] = useState(null)
+  const [loading, setLoading] = useState(true)
+  
+  // Use real-time market data
+  const { marketData: realtimeMarketData, trendingKeywords } = useRealtimeMarket()
+
+  // Load initial data
+  useEffect(() => {
+    const loadAnalyticsData = async () => {
+      try {
+        setLoading(true)
+        const [marketAnalytics, insights] = await Promise.all([
+          reservoirService.getMarketAnalytics(),
+          openaiService.getDomainInsights('market-analysis', { 
+            category: 'market-overview',
+            timeRange 
+          })
+        ])
+        
+        setMarketData(marketAnalytics)
+        setAiInsights(insights)
+      } catch (error) {
+        console.error('Failed to load analytics data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadAnalyticsData()
+  }, [timeRange])
+
+  // Update market data with real-time updates
+  useEffect(() => {
+    if (realtimeMarketData) {
+      setMarketData(prev => ({
+        ...prev,
+        ...realtimeMarketData
+      }))
+    }
+  }, [realtimeMarketData])
 
   const analyticsData = {
     marketOverview: {
@@ -235,6 +278,88 @@ const Analytics = () => {
           </div>
         </div>
       </div>
+
+      {/* AI Insights Section */}
+      {aiInsights && (
+        <div className="bg-dark-surface rounded-lg p-6 border border-dark-border">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 rounded-full bg-purple-500/10">
+              <Brain size={20} className="text-purple-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-white">AI Market Insights</h3>
+              <p className="text-dark-text text-sm">Powered by advanced AI analysis</p>
+            </div>
+            <div className="ml-auto">
+              <span className="text-xs text-purple-400 bg-purple-500/10 px-2 py-1 rounded-full">
+                {aiInsights.confidence}% Confidence
+              </span>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <div className="bg-dark-bg rounded-lg p-4">
+              <p className="text-dark-text leading-relaxed">{aiInsights.insights}</p>
+            </div>
+            
+            {aiInsights.recommendations && (
+              <div>
+                <h4 className="text-white font-medium mb-2">Key Recommendations:</h4>
+                <ul className="space-y-2">
+                  {aiInsights.recommendations.map((rec, index) => (
+                    <li key={index} className="flex items-start gap-2 text-dark-text">
+                      <Zap size={14} className="text-yellow-400 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm">{rec}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Real-time Trending Keywords */}
+      {trendingKeywords && trendingKeywords.length > 0 && (
+        <div className="bg-dark-surface rounded-lg p-6 border border-dark-border">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-white">Live Trending Keywords</h3>
+            <div className="flex items-center gap-2 text-green-400">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-xs">Live</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {trendingKeywords.map((keyword, index) => (
+              <div key={index} className="bg-dark-bg rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-white">{keyword.keyword}</span>
+                  <span className={`text-sm ${keyword.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {keyword.change >= 0 ? '+' : ''}{keyword.change.toFixed(1)}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-dark-text text-sm">Volume: {keyword.volume}</span>
+                  <span className="text-xs text-dark-text bg-dark-surface px-2 py-1 rounded">
+                    {keyword.category}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {loading && (
+        <div className="bg-dark-surface rounded-lg p-6 border border-dark-border">
+          <div className="flex items-center justify-center space-x-2">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-400"></div>
+            <span className="text-dark-text">Loading advanced analytics...</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
