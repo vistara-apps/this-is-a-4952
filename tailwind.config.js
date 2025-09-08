@@ -12,6 +12,7 @@ export default {
         accent: 'hsl(130, 80%, 50%)',
         primary: 'hsl(210, 70%, 55%)',
         surface: 'hsl(0, 0%, 100%)',
+        border: 'hsl(220, 20%, 85%)',
         dark: {
           bg: 'hsl(220, 20%, 8%)',
           surface: 'hsl(220, 20%, 12%)',

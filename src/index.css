@@ -8,11 +8,18 @@
   }
   
   body {
-    @apply bg-bg text-text antialiased;
+    @apply bg-bg text-text antialiased transition-colors duration-200;
   }
   
   html.dark body {
     @apply bg-dark-bg text-dark-text;
+  }
+  
+  /* Ensure smooth transitions for theme changes */
+  * {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
   }
 }
 

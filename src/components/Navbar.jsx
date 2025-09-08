@@ -1,5 +1,6 @@
 import React from 'react'
 import { BarChart3, Search, Gavel, TrendingUp, Heart, User } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
 
 const Navbar = ({ activeTab, setActiveTab }) => {
   const navItems = [
@@ -11,7 +12,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
   ]
 
   return (
-    <nav className="bg-dark-surface border-b border-dark-border">
+    <nav className="bg-surface dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
@@ -28,10 +29,10 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
-                      className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-2 transition-colors ${
+                      className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-2 transition-colors duration-200 ${
                         activeTab === item.id
                           ? 'bg-primary text-white'
-                          : 'text-dark-text hover:bg-dark-border hover:text-white'
+                          : 'text-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-dark-border hover:text-text dark:hover:text-white'
                       }`}
                     >
                       <Icon size={16} />
@@ -46,7 +47,8 @@ const Navbar = ({ activeTab, setActiveTab }) => {
             <span className="text-sm text-green-400 px-3 py-1 bg-green-400/10 rounded-full">
               Pro Plan
             </span>
-            <button className="p-2 rounded-full hover:bg-dark-border transition-colors">
+            <ThemeToggle />
+            <button className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-dark-border transition-colors duration-200 text-text dark:text-dark-text">
               <User size={20} />
             </button>
           </div>
