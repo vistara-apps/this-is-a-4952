@@ -64,8 +64,8 @@ const Dashboard = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-          <p className="text-dark-text mt-1">Welcome back! Here's what's happening with your domains.</p>
+          <h1 className="text-3xl font-bold text-text dark:text-white">Dashboard</h1>
+          <p className="text-gray-600 dark:text-dark-text mt-1">Welcome back! Here's what's happening with your domains.</p>
         </div>
         <div className="mt-4 sm:mt-0">
           <button className="gradient-bg text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
@@ -79,11 +79,11 @@ const Dashboard = () => {
         {stats.map((stat, index) => {
           const Icon = stat.icon
           return (
-            <div key={index} className="bg-dark-surface rounded-lg p-6 border border-dark-border hover:border-purple-400/50 transition-colors">
+            <div key={index} className="bg-surface dark:bg-dark-surface rounded-lg p-6 border border-gray-200 dark:border-dark-border hover:border-purple-400/50 transition-colors">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-dark-text text-sm">{stat.title}</p>
-                  <p className="text-2xl font-bold text-white mt-1">{stat.value}</p>
+                  <p className="text-gray-600 dark:text-dark-text text-sm">{stat.title}</p>
+                  <p className="text-2xl font-bold text-text dark:text-white mt-1">{stat.value}</p>
                   <p className={`text-sm mt-1 ${stat.color}`}>{stat.change}</p>
                 </div>
                 <div className={`p-3 rounded-full bg-opacity-10 ${stat.color.replace('text-', 'bg-')}`}>
@@ -97,20 +97,20 @@ const Dashboard = () => {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-dark-surface rounded-lg p-6 border border-dark-border">
-          <h3 className="text-lg font-semibold text-white mb-4">Market Trends</h3>
+        <div className="bg-surface dark:bg-dark-surface rounded-lg p-6 border border-gray-200 dark:border-dark-border">
+          <h3 className="text-lg font-semibold text-text dark:text-white mb-4">Market Trends</h3>
           <AnalyticsChart variant="line" />
         </div>
-        <div className="bg-dark-surface rounded-lg p-6 border border-dark-border">
-          <h3 className="text-lg font-semibold text-white mb-4">Auction Activity</h3>
+        <div className="bg-surface dark:bg-dark-surface rounded-lg p-6 border border-gray-200 dark:border-dark-border">
+          <h3 className="text-lg font-semibold text-text dark:text-white mb-4">Auction Activity</h3>
           <AnalyticsChart variant="bar" />
         </div>
       </div>
 
       {/* Featured Auctions */}
-      <div className="bg-dark-surface rounded-lg p-6 border border-dark-border">
+      <div className="bg-surface dark:bg-dark-surface rounded-lg p-6 border border-gray-200 dark:border-dark-border">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-white">Featured Auctions</h3>
+          <h3 className="text-lg font-semibold text-text dark:text-white">Featured Auctions</h3>
           <button className="text-primary hover:text-blue-300 text-sm font-medium">
             View All Auctions
           </button>
